@@ -1,0 +1,2 @@
+Nu HTML Checker (vnu.jar) on q5-q6-html-js/index.html
+Result: 0 errors, 0 warnings (the checker prints nothing when a document is valid).
