@@ -1,0 +1,25 @@
+PASS  missing params: no warning/exception, "Page 1 of 3"
+PASS  missing params: 10 articles
+PASS  missing params: no "Search for" label
+PASS  missing params: paged=1, s=""
+PASS  page 2: "Page 2 of 3", posts 11-20
+PASS  page 2: paged=2 passed (not "page")
+PASS  page 2: no ads (post 1 is on page 1)
+PASS  bad page "0" -> paged=1
+PASS  bad page "-5" -> paged=1
+PASS  bad page "abc" -> paged=1
+PASS  bad page ["x"] -> paged=1
+PASS  search hit: one article, "Search for needle"
+PASS  search XSS: no raw <script> in output
+PASS  search as array: treated as empty, no error
+PASS  no results: message shown
+PASS  no results: "Page 1 of 1", no article
+PASS  ads: 3 divs from post 1
+PASS  ads: unique ids ad-1, ad-2, ad-3
+PASS  ads: no literal [ad] left
+PASS  ads: marker alone in <p> replaces the <p> (no div inside p)
+PASS  unit: no markers -> unchanged
+PASS  unit: other brackets/letters untouched (old bug: [ad] was a char class)
+PASS  unit: "[ad][ad]" adjacent -> 2 divs
+
+ALL PASS

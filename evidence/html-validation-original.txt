@@ -1,0 +1,3 @@
+"file:/C:/Users/Collins/AppData/Local/Temp/orig.html":1.1-1.6: error: Start tag seen without seeing a doctype first. Expected “<!DOCTYPE html>”.
+"file:/C:/Users/Collins/AppData/Local/Temp/orig.html":2.1-2.6: error: Stray start tag “body”.
+"file:/C:/Users/Collins/AppData/Local/Temp/orig.html":2.1-2.6: error fatal: Cannot recover after last error. Any further errors will be ignored.

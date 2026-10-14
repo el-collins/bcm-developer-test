@@ -1,0 +1,33 @@
+PASS toggle button exists and was created by JS (not in source HTML)
+PASS load: 3 paragraphs, separators ppHp
+PASS load: no HR at start/end, no two HRs adjacent
+PASS load: P1 P2 HR P3(image)
+PASS click 1: 6 paragraphs, separators ppHppHpp
+PASS click 1: no HR at start/end, no two HRs adjacent
+PASS click 2: 9 paragraphs, separators ppHppHppHppHp
+PASS click 2: no HR at start/end, no two HRs adjacent
+PASS click 3: 12 paragraphs, separators ppHppHppHppHppHpp
+PASS click 3: no HR at start/end, no two HRs adjacent
+PASS after 3 clicks: 12 paragraphs
+PASS batch 1 is a permutation of originals
+PASS batch 2 is a permutation of originals
+PASS batch 3 is a permutation of originals
+PASS batch 4 is a permutation of originals
+PASS randomised: 6 distinct orders across 20 batches
+PASS after 20 more clicks: 72 paragraphs, separators ppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHpp
+PASS after 20 more clicks: no HR at start/end, no two HRs adjacent
+PASS toggle: all image paragraphs hidden
+PASS hidden, before adding: 72 paragraphs, separators ppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHpp
+PASS hidden, before adding: no HR at start/end, no two HRs adjacent
+PASS hidden: new image paragraphs are hidden too
+PASS hidden: paragraph count grew by 6 (72 -> 78)
+PASS hidden, after adding: 78 paragraphs, separators ppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHpp
+PASS hidden, after adding: no HR at start/end, no two HRs adjacent
+PASS hidden: aria-pressed=true
+PASS shown again: no hidden image paragraphs
+PASS shown, after toggle: 78 paragraphs, separators ppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHpp
+PASS shown, after toggle: no HR at start/end, no two HRs adjacent
+PASS shown: new image paragraphs visible
+PASS shown, after adding: 81 paragraphs, separators ppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHppHp
+PASS shown, after adding: no HR at start/end, no two HRs adjacent
+PASS no console/page errors

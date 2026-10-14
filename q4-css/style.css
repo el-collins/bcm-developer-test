@@ -1,0 +1,65 @@
+/* Mobile first. Breakpoint: 600px (a 3-column grid needs ~600px to stay readable). */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 1rem;
+    font-family: system-ui, sans-serif;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr); /* minmax(0,..) lets cells shrink so long words cannot widen the grid */
+    max-width: 60rem;
+    margin: 0 auto;
+    border: 1px solid #999;
+}
+
+.cell {
+    min-height: 4rem;
+    padding: 1rem;
+    border: 1px solid #999;
+    margin: -1px 0 0 -1px;   /* collapse shared borders */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+}
+
+.cell h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    overflow-wrap: anywhere; /* long headings wrap instead of overflowing */
+}
+
+/* Mobile: show A D B C G in DOM order. Hide E, F, H. */
+.cell-e, .cell-f, .cell-h { display: none; }
+
+@media (min-width: 600px) {
+    .layout {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-areas:
+            "a a b"
+            "c d e"
+            "f g h";
+    }
+    .cell-a { grid-area: a; }
+    .cell-b { grid-area: b; }
+    .cell-c { grid-area: c; }
+    .cell-d { grid-area: d; }
+    .cell-e { grid-area: e; }
+    .cell-f { grid-area: f; }
+    .cell-g { grid-area: g; }
+    .cell-h { grid-area: h; }
+    .cell-e, .cell-f, .cell-h { display: flex; }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}

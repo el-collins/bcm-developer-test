@@ -1,0 +1,6 @@
+6.44-7.16: error: Attribute “name” not allowed on element “abbr” at this point.
+8.9-8.48: error: Attribute “with” not allowed on element “img” at this point.
+8.9-8.48: error: Bad value “auto” for attribute “height” on element “img”: Expected a digit but saw “a” instead.
+8.9-8.48: error: An “img” element must have an “alt” attribute, except under certain conditions. For details, consult guidance on providing text alternatives for images.
+9.44-9.50: error: End tag “code” violates nesting rules.
+9.51-9.54: error: No “b” element in scope but a “b” end tag seen.
