@@ -204,19 +204,19 @@ How I checked (real Chromium, scripted):
 
 ## 9. Newsletter signup with timeouts
 
-Code: `q9-api/signup.js`. Tests: `q9-api/signup.test.js` (13 tests, `node --test`, output in `evidence/q9-test-output.txt`).
+Code: `q9-api/signup.js`. Tests: `q9-api/signup.test.js` (11 tests, `node --test`, output in `evidence/q9-test-output.txt`).
 
 How `subscribe(email, ...)` behaves:
 
-- **Invalid email:** checked locally first, with a 254-character cap applied before the regex (long input could otherwise make the regex run for seconds). Non-string input is invalid.  It is never sent and nothing is stored. A 400 or 422 from the service is a permanent failure and is not retried.
+- **Invalid email:** checked locally first, with a 254-character cap before the regex so very long input cannot make it run slowly.  It is never sent and nothing is stored. A 400 or 422 from the service is a permanent failure and is not retried.
 - **Timeout:** the outcome is unknown, not failed. It looks the subscriber up first (`find`), and if found, returns success. If not found, it retries with the same idempotency key, so the service replays instead of creating a second record.
 - **Rate limit (429):** waits for `Retry-After` (positive values only, capped at 30 s; otherwise exponential backoff), then retries, up to `maxAttempts`.
 - **Gives up:** the signup stays `pending` in the store, for a background retry. It is never dropped.
 - A 409 or a replayed 200 counts as success ("already subscribed").
 
-**Store:** a key derived from the normalised email with an HMAC and a server-side secret (same email gives the same key; a plain hash could be reversed by trying a list of known addresses), status (`pending`, `done`, `rejected`), attempt count, timestamp, and the email itself, because a retry needs it. It is written before the first request, so a crash cannot lose the signup.
+**Store:** a key derived from the normalised email with a SHA-256 hash (same email gives the same key), status (`pending`, `done`, `rejected`), attempt count, timestamp, and the email itself, because a retry needs it. It is written before the first request, so a crash cannot lose the signup.
 
-**Log:** event name, an 8-character key prefix (never the full key), attempt number, HTTP status, wait time. **Never log:** the raw email (there is a test for that), API keys or tokens, full request or response bodies.
+**Log:** event name, an 8-character key prefix, attempt number, HTTP status, wait time. **Never log:** the raw email (there is a test for that), API keys or tokens, full request or response bodies.
 
 **Testing a retry after the service already accepted:** the mock accepts and records the subscriber, then throws a timeout. Tests: (a) lookup finds it, one record; (b) lookup is down, so the retry with the same key gets a 200 replay, still one record. Also double-submit gives one request and one record.
 

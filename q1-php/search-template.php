@@ -11,7 +11,7 @@ $q = new WP_Query([
     'post_type'      => 'post',
     'post_status'    => 'publish',
     'posts_per_page' => 10,
-    'paged'          => $page,   // WP_Query has no 'page' arg for this; 'paged' is the pagination arg.
+    'paged'          => $page,
     's'              => $search,
 ]);
 
@@ -31,13 +31,13 @@ $ad_counter = 0;
         ?>
         <article>
             <h2><?php echo esc_html(get_the_title()); ?></h2>
-            <?php echo $content; // Filtered post content plus our own markup. ?>
+            <?php echo $content; ?>
         </article>
     <?php endwhile; ?>
 
     <?php
     echo paginate_links([
-        'base'      => add_query_arg('page', '%#%'), // WP-documented pattern; do not escape the %#% token
+        'base'      => add_query_arg('page', '%#%'),
         'format'    => '',
         'current'   => $page,
         'total'     => $pages,

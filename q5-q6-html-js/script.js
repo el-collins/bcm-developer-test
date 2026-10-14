@@ -4,7 +4,6 @@
     var container = document.getElementById('paragraphs');
     var addButton = document.getElementById('add-btn');
 
-    // Pristine copies of the three original paragraphs, taken before anything changes.
     var templates = Array.prototype.map.call(container.querySelectorAll(':scope > p'), function (p) {
         return p.cloneNode(true);
     });
@@ -21,7 +20,6 @@
         }
     }
 
-    // Fisher-Yates: unbiased shuffle (sort(() => Math.random() - .5) is biased).
     function shuffled(list) {
         var a = list.slice();
         for (var i = a.length - 1; i > 0; i--) {
@@ -31,8 +29,7 @@
         return a;
     }
 
-    // Rebuild separators from scratch: HR after every pair when another paragraph follows.
-    // All <p> count, hidden or not, because hiding is only display state.
+    // HR after every pair when another paragraph follows. Hidden paragraphs count.
     function renumberSeparators() {
         container.querySelectorAll(':scope > hr').forEach(function (hr) { hr.remove(); });
         var paras = container.querySelectorAll(':scope > p');
@@ -48,13 +45,12 @@
     function addParagraphs() {
         shuffled(templates).forEach(function (tpl) {
             var copy = tpl.cloneNode(true);
-            applyVisibility(copy); // new image paragraphs obey current toggle state
+            applyVisibility(copy);
             container.appendChild(copy);
         });
         renumberSeparators();
     }
 
-    // Second button, JavaScript only.
     var toggleButton = document.createElement('button');
     toggleButton.type = 'button';
     toggleButton.id = 'toggle-btn';
@@ -71,5 +67,5 @@
 
     addButton.addEventListener('click', addParagraphs);
 
-    renumberSeparators(); // initial load: P1, P2, HR, P3
+    renumberSeparators();
 })();

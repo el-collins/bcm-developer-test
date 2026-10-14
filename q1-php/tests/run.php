@@ -1,9 +1,8 @@
 <?php
 // Minimal WordPress stubs so the template runs without WordPress.
-// Run: php tests/run.php   (PHP 8)
 error_reporting(E_ALL);
 set_error_handler(function ($no, $str, $file, $line) {
-    throw new ErrorException($str, 0, $no, $file, $line); // any warning/deprecation fails the test
+    throw new ErrorException($str, 0, $no, $file, $line);
 });
 
 function sanitize_text_field($s) { return trim(strip_tags((string) $s)); }

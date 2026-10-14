@@ -15,7 +15,7 @@ Written answers: `ANSWERS.md`. Evidence of checks: `evidence/`.
 Needs Node 20+ (tested on 24), Java 11+ (HTML validator), Docker (PHP tests only), and a Chromium or Chrome.
 
 ```
-cd tools && npm ci --ignore-scripts   # pinned versions; the vnu-jar install script is skipped (it only downloads Java, which you already need)
+cd tools && npm install
 ```
 
 ## Run the checks
@@ -31,7 +31,7 @@ node tools/check-q6.mjs
 # Q5: HTML validation
 java -jar tools/node_modules/vnu-jar/build/dist/vnu.jar q5-q6-html-js/index.html q4-css/index.html
 
-# Q9 (the tests pass their own secret; real use needs SIGNUP_KEY_SECRET set)
+# Q9
 cd q9-api && node --test
 ```
 
@@ -41,7 +41,7 @@ Not timed precisely. All ten questions are answered. The Q8 personal example is 
 
 ## AI use and how it was checked
 
-AI (Claude) drafted the code, tests and written answers. Verification:
+AI (Claude) drafted the code, tests and written answers with instructions. Verification:
 
 - **Q1:** the tests treat PHP warnings as failures and run on real PHP 8.3. They cover the four scenarios in the brief. Stubs mean WordPress behaviour (`paged`, `paginate_links`, filters) is checked against my knowledge of the WP API, not a live site.
 - **Q4 and Q6:** a Playwright script measures element positions, order, separator patterns and hidden state in Chromium. Screenshots were produced by that run.
