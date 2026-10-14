@@ -2,6 +2,8 @@
 const crypto = require('node:crypto');
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // cheap shape check; the service stays the authority
+const MAX_EMAIL_LENGTH = 254;   // checked BEFORE the regex: stops catastrophic backtracking on huge input
+const MAX_WAIT_MS = 30000;      // upper bound on any Retry-After wait
 
 /**
  * Subscribe an email without losing or duplicating the signup.
@@ -13,15 +15,18 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // cheap shape check; the service
  *
  * Returns { outcome: 'subscribed' | 'already_subscribed' | 'invalid_email' | 'failed', attempts }.
  */
-async function subscribe(email, { service, store, log = () => {}, sleep = ms => new Promise(r => setTimeout(r, ms)), maxAttempts = 4, timeoutMs = 3000 }) {
-    const normalized = String(email ?? '').trim().toLowerCase();
-    if (!EMAIL_RE.test(normalized)) {
+async function subscribe(email, { service, store, secret = process.env.SIGNUP_KEY_SECRET, log = () => {}, sleep = ms => new Promise(r => setTimeout(r, ms)), maxAttempts = 4, timeoutMs = 3000 }) {
+    if (!secret) throw new Error('subscribe: a server-side secret is required to derive idempotency keys');
+    const normalized = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (normalized.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(normalized)) {
         log({ event: 'signup_rejected', reason: 'invalid_email_local' });
         return { outcome: 'invalid_email', attempts: 0 }; // never sent, nothing to retry
     }
 
     // Same email -> same key on every retry. This is what makes retries safe.
-    const key = crypto.createHash('sha256').update(normalized).digest('hex').slice(0, 32);
+    // HMAC with a server-side secret: stable per email, but not reversible by hashing a list of known addresses.
+    const key = crypto.createHmac('sha256', secret).update(normalized).digest('hex').slice(0, 32);
+    const logId = key.slice(0, 8); // logs get a short prefix only
     const prior = store.get(key);
     if (prior?.status === 'done') return { outcome: 'already_subscribed', attempts: 0 };
     // Write BEFORE the call so a crash mid-request cannot lose the signup.
@@ -34,7 +39,7 @@ async function subscribe(email, { service, store, log = () => {}, sleep = ms => 
         attempts++;
         try {
             const res = await service.subscribe({ email: normalized }, { idempotencyKey: key, timeoutMs });
-            log({ event: 'signup_response', key, attempt: attempts, status: res.status });
+            log({ event: 'signup_response', id: logId, attempt: attempts, status: res.status });
 
             if (res.status === 200 || res.status === 201 || res.status === 409) {
                 save('done', attempts);
@@ -45,8 +50,9 @@ async function subscribe(email, { service, store, log = () => {}, sleep = ms => 
                 return { outcome: 'invalid_email', attempts }; // permanent: do not retry
             }
             if (res.status === 429) {
-                const wait = Number(res.headers?.['retry-after']) * 1000 || 2 ** attempts * 500;
-                log({ event: 'rate_limited', key, attempt: attempts, waitMs: wait });
+                const hinted = Number(res.headers?.['retry-after']) * 1000;
+                const wait = Math.min(hinted > 0 ? hinted : 2 ** attempts * 500, MAX_WAIT_MS); // positive and capped
+                log({ event: 'rate_limited', id: logId, attempt: attempts, waitMs: wait });
                 await sleep(wait); // honour Retry-After
                 continue;
             }
@@ -55,7 +61,7 @@ async function subscribe(email, { service, store, log = () => {}, sleep = ms => 
         } catch (err) {
             if (err.code !== 'ETIMEDOUT') throw err;
             // Outcome unknown. Do NOT assume failure: look it up, then retry with the SAME key.
-            log({ event: 'timeout', key, attempt: attempts });
+            log({ event: 'timeout', id: logId, attempt: attempts });
             const existing = await service.find(normalized).catch(() => null);
             if (existing) {
                 save('done', attempts);
@@ -65,7 +71,7 @@ async function subscribe(email, { service, store, log = () => {}, sleep = ms => 
         }
     }
     save('pending', attempts); // left for a background retry, not dropped
-    log({ event: 'signup_gave_up', key, attempts });
+    log({ event: 'signup_gave_up', id: logId, attempts });
     return { outcome: 'failed', attempts };
 }
 

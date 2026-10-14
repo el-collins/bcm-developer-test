@@ -15,7 +15,7 @@ Written answers: `ANSWERS.md`. Evidence of checks: `evidence/`.
 Needs Node 20+ (tested on 24), Java 11+ (HTML validator), Docker (PHP tests only), and a Chromium or Chrome.
 
 ```
-cd tools && npm install
+cd tools && npm ci --ignore-scripts   # pinned versions; the vnu-jar install script is skipped (it only downloads Java, which you already need)
 ```
 
 ## Run the checks
@@ -31,7 +31,7 @@ node tools/check-q6.mjs
 # Q5: HTML validation
 java -jar tools/node_modules/vnu-jar/build/dist/vnu.jar q5-q6-html-js/index.html q4-css/index.html
 
-# Q9
+# Q9 (the tests pass their own secret; real use needs SIGNUP_KEY_SECRET set)
 cd q9-api && node --test
 ```
 

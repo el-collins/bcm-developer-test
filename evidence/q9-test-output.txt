@@ -1,16 +1,21 @@
-✔ timeout AFTER the service accepted: retry creates exactly one record (5.2813ms)
-✔ timeout after accept and lookup unavailable: retry with same key still creates one record (1.149ms)
-✔ rate limit: waits Retry-After, then succeeds once (2.4064ms)
-✔ invalid email: rejected locally, no request, nothing stored (0.4686ms)
-✔ invalid email rejected by service (422): permanent, not retried (0.4922ms)
-✔ same signup twice (double click): one request, one record (1.6444ms)
-✔ persistent timeouts: gives up, stays pending in store (not lost) (2.224ms)
-✔ logs never contain the raw email (1.0493ms)
-ℹ tests 8
+✔ timeout AFTER the service accepted: retry creates exactly one record (6.2358ms)
+✔ timeout after accept and lookup unavailable: retry with same key still creates one record (1.4679ms)
+✔ rate limit: waits Retry-After, then succeeds once (9.8376ms)
+✔ invalid email: rejected locally, no request, nothing stored (0.7002ms)
+✔ invalid email rejected by service (422): permanent, not retried (0.8315ms)
+✔ same signup twice (double click): one request, one record (0.7973ms)
+✔ persistent timeouts: gives up, stays pending in store (not lost) (1.0861ms)
+✔ logs never contain the raw email (2.8476ms)
+✔ very long input is rejected by length before the regex runs (ReDoS guard) (1.2001ms)
+✔ non-string email (object/array) is invalid, not stringified (1.5697ms)
+✔ Retry-After is capped at 30s and negative values fall back to backoff (1.4745ms)
+✔ idempotency key is not a plain hash of the email, and no key-like value is logged in full (2.7555ms)
+✔ missing secret throws (fail closed) (6.2327ms)
+ℹ tests 13
 ℹ suites 0
-ℹ pass 8
+ℹ pass 13
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 293.0126
+ℹ duration_ms 1378.5113
