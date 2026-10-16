@@ -6,7 +6,7 @@ Code lives in `q1-php/`, `q4-css/`, `q5-q6-html-js/`, `q9-api/`. Check output is
 
 ## 1. PHP
 
-Corrected files: `q1-php/search-template.php`, `q1-php/ads.php`. Tests: `q1-php/tests/run.php` (output in `evidence/q1-php-test-output.txt`, 24 checks pass).
+Corrected files: `q1-php/search-template.php`, `q1-php/ads.php`. Tests: `q1-php/tests/run.php` (output in `evidence/q1-php-test-output.txt`).
 
 ### Errors and their effects
 
@@ -24,7 +24,8 @@ Corrected files: `q1-php/search-template.php`, `q1-php/ads.php`. Tests: `q1-php/
 | 10 | `esc_html(the_title())` | `the_title()` echoes and returns null, so the title is printed unescaped and the heading is empty. Use `esc_html(get_the_title())`. |
 | 11 | `get_the_content()` used without the `the_content` filters | No paragraphs, shortcodes or embeds. Replacing after the filter also lets us handle `<p>[ad]</p>`. |
 | 12 | Content wrapped in an extra `<p>` | Nested paragraphs (invalid HTML). |
-| 13 | No no-results branch, no pagination links, no `wp_reset_postdata()` | Blank page on empty search, no way to reach page 2, and the global `$post` is left changed. |
+| 13 | `$page` and `$pages` are WordPress globals that `the_post()` overwrites inside the loop (not in the original brief, but found when running the corrected version on real WordPress) | After the loop, `$pages` holds the post's content pages, so `paginate_links()` gets `total` of 1 and prints no links. The fix is to use `$current_page` and `$total_pages`. |
+| 14 | No no-results branch, no pagination links, no `wp_reset_postdata()` | Blank page on empty search, no way to reach page 2, and the global `$post` is left changed. |
 
 ### Assumptions about the ad placeholders
 
@@ -36,7 +37,7 @@ Corrected files: `q1-php/search-template.php`, `q1-php/ads.php`. Tests: `q1-php/
 
 ### Checks shown (`evidence/q1-php-test-output.txt`)
 
-Missing parameters (no warnings, "Page 1 of 3", 10 posts), page 2 (posts 11-20, `paged=2`), junk page values (`0`, `-5`, `abc`, array), no results (message, "Page 1 of 1"), XSS in `s`, and three `[ad]` markers in one post (3 divs, ids 1-3, no literal `[ad]` left). The tests turn any PHP warning into a failure. They run on PHP 8.3 with small WordPress stubs, because WordPress itself was not installed.
+Missing parameters (no warnings, "Page 1 of 3", 10 posts), page 2 (posts 11-20, `paged=2`), junk page values (`0`, `-5`, `abc`, array), no results (message, "Page 1 of 1"), XSS in `s`, and three `[ad]` markers in one post (3 divs, ids 1-3, no literal `[ad]` left). The tests turn any PHP warning into a failure. They run on PHP 8.3 with small WordPress stubs. The same scenarios also run against real WordPress 7.1.3 in Docker (`q1-php/wp-check/run.sh`, output in `evidence/q1-real-wordpress-output.txt`, 12 checks pass). That run caught error 13, which the stubs could not.
 
 ---
 

@@ -16,9 +16,9 @@ function paginate_links($a) { return '<nav data-total="' . $a['total'] . '" data
 
 $GLOBALS['fake_posts'] = [];
 $GLOBALS['last_args'] = null;
-$GLOBALS['current'] = null;
-function get_the_content() { return $GLOBALS['current']['content']; }
-function get_the_title() { return $GLOBALS['current']['title']; }
+$GLOBALS["current"] = null;
+function get_the_content() { return $GLOBALS["current"]['content']; }
+function get_the_title() { return $GLOBALS["current"]['title']; }
 
 class WP_Query
 {
@@ -35,7 +35,7 @@ class WP_Query
         $this->posts = array_slice($all, ($args['paged'] - 1) * $per, $per);
     }
     public function have_posts() { return $this->i < count($this->posts); }
-    public function the_post() { $GLOBALS['current'] = $this->posts[$this->i++]; }
+    public function the_post() { $GLOBALS["current"] = $this->posts[$this->i++]; }
 }
 
 function render(array $get): string

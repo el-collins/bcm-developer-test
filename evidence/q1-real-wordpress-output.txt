@@ -1,0 +1,15 @@
+waiting for database...
+PASS  no parameters: 'Page 1 of 3' and 10 articles
+PASS  page 2: 'Page 2 of 3' and 10 articles
+PASS  page 2 shows different posts than page 1
+PASS  page 3 has the last 6 posts (25 plus the default sample post)
+PASS  pagination links present and keep search term
+PASS  search 'needle': one article, label shown
+PASS  no results: message shown, no articles
+PASS  3 [ad] markers become 3 divs, ids 1-3
+PASS  no literal [ad] left in the page
+PASS  search term is escaped (no raw <script>)
+PASS  junk page value (?page=abc) does not break the page
+PASS  no PHP warnings, notices or fatals in the server log
+
+ALL PASS (real WordPress 7.1.3, PHP 8.3)

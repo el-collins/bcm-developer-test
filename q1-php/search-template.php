@@ -4,22 +4,23 @@
  */
 require_once __DIR__ . '/ads.php';
 
-$page   = bcm_get_page($_GET);
-$search = bcm_get_search($_GET);
+// Not $page / $pages: WordPress sets those globals itself inside the loop.
+$current_page = bcm_get_page($_GET);
+$search       = bcm_get_search($_GET);
 
 $q = new WP_Query([
     'post_type'      => 'post',
     'post_status'    => 'publish',
     'posts_per_page' => 10,
-    'paged'          => $page,
+    'paged'          => $current_page,
     's'              => $search,
 ]);
 
-$pages = max(1, (int) $q->max_num_pages);
+$total_pages = max(1, (int) $q->max_num_pages);
 $ad_counter = 0;
 ?>
 <h1>
-    Page <?php echo (int) $page; ?> of <?php echo (int) $pages; ?>
+    Page <?php echo $current_page; ?> of <?php echo $total_pages; ?>
     <?php if ($search !== '') : ?>: Search for <?php echo esc_html($search); ?><?php endif; ?>
 </h1>
 
@@ -39,8 +40,8 @@ $ad_counter = 0;
     echo paginate_links([
         'base'      => add_query_arg('page', '%#%'),
         'format'    => '',
-        'current'   => $page,
-        'total'     => $pages,
+        'current'   => $current_page,
+        'total'     => $total_pages,
         'add_args'  => $search !== '' ? ['s' => $search] : [],
     ]);
     ?>
