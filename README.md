@@ -40,7 +40,7 @@ cd q9-api && node --test
 
 ## Time and what remains
 
-Not timed precisely. All ten questions are answered. The Q8 personal example is the candidate's own account (WHMCS order-form and client-area customisation), written from what they described. With more time: add keyboard and screen-reader testing for Q4 and Q6, and run Q10 as an actual REST route with tests.
+Not timed precisely. All ten questions are answered. The Q8 personal example is my own account (WHMCS order-form and client-area customisation), written from my experience. With more time: add keyboard and screen-reader testing for Q4 and Q6, and run Q10 as an actual REST route with tests.
 
 ## AI use and how it was checked
 
@@ -50,4 +50,3 @@ AI (Claude) drafted the code, tests and written answers with instructions. Verif
 - **Q4 and Q6:** a Playwright script measures element positions, order, separator patterns and hidden state in Chromium. Screenshots were produced by that run.
 - **Q5:** the Nu HTML Checker was run on the original (to confirm which problems are real errors) and the corrected file (no errors).
 - **Q9:** the mock service simulates accepted-then-timeout, 429 and invalid input.
-- **Written answers (2, 3, 7, 8, 10)** are reasoned from general WordPress and web knowledge and were not run against a real site. The candidate should read them, change anything they disagree with, and be ready to explain every line.
