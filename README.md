@@ -37,7 +37,7 @@ cd q9-api && node --test
 
 ## Time and what remains
 
-Not timed precisely. All ten questions are answered. The Q8 personal example is the candidate's own account (WHMCS order-form and client-area customisation), written from what they described. With more time: run Q1 inside a real WordPress install (the stubs prove the logic, not WP integration), add keyboard and screen-reader testing for Q4 and Q6, and run Q10 as an actual REST route with tests.
+Not timed precisely. All ten questions are answered. The Q8 personal example is the candidate's own account (WHMCS order-form and client-area customisation), written from what they described. With more time: run Q1 inside a real WordPress install (the stubs prove the logic, not WP integration; in particular I did not confirm that `paginate_links` prints its page links on a live site), add keyboard and screen-reader testing for Q4 and Q6, and run Q10 as an actual REST route with tests.
 
 ## AI use and how it was checked
 
